@@ -104,6 +104,7 @@ let getQrloginUrl = async (ctx, next) => {
 let getLoginStatus = async (ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
+    
     let res = await Store.main.findOne({ key: 'BilibiliLoginCookies', id: query.id })
     if (res) {
         ctx.body = { code: 0, data: res }

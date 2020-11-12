@@ -2,9 +2,9 @@
 const Log = require('../util/log')
 
 let goToAuthPage = async (ctx, next) => {
-    Log.info('Auth Request Redirected to ' + ctx.globalConfig.publicUrl + '/' + ctx.params.platform + '/auth')
+    Log.info('Auth Request Redirected to ' + ctx.globalConfig.publicUrl + '/auth/' + ctx.params.platform)
     ctx.status = 302
-    ctx.redirect(ctx.globalConfig.publicUrl + '/' + ctx.params.platform + '/auth')
+    ctx.redirect(ctx.globalConfig.publicUrl + '/auth/' + ctx.params.platform)
     await next()
 }
 

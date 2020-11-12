@@ -23,4 +23,4 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         envs: API_TOKEN
-        script: cd Git/DeveloperPortal-BE && git pull && yarn && export PATH="/home/yuna/.yarn/bin:$PATH" && pm2 restart matatakiauthAPI
+        script: cd Git/MatatakiAuth-BE && git pull && yarn && export PATH="/home/yuna/.yarn/bin:$PATH" && pm2 restart matatakiauthAPI

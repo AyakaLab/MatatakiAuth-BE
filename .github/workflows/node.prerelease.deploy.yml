@@ -1,4 +1,4 @@
-name: Pre-Release Deployment
+name: Pre-Release CD
 
 on: 
   pull_request:

@@ -39,6 +39,7 @@ Global.Add('config', config)
 
 // to Log
 app.use(async (ctx, next) => {
+    ctx.globalConfig = config
     await next();
     const rt = ctx.response.get('X-Response-Time');
     Log.info(`${ctx.request.ips} ${ctx.method} ${ctx.url} - ${rt}`);

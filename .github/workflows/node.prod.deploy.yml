@@ -1,0 +1,26 @@
+name: Production CD
+
+on: 
+  pull_request:
+    branches: [ production ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - name: SSH Remote Commands
+      uses: appleboy/ssh-action@v0.1.2
+      env: 
+        API_TOKEN: ${{ secrets.API_TOKEN }}
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        envs: API_TOKEN
+        script: cd Git/MatatakiAuth-BE && git pull && yarn && export PATH="/home/yuna/.yarn/bin:$PATH" && pm2 restart matatakiauthAPI

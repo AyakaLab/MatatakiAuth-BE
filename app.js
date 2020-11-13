@@ -14,11 +14,6 @@ const KoaStatic = require('koa-static')
 const KoaRouter = require('koa-router')
 const koaBody = require('koa-body')
 
-// Local Packages
-const Log = require('./src/util/log')
-const Global = require('./src/util/global')
-const routers = require('./src/route/router.js')
-
 let config = undefined
 try {
     config = require('./config.json')
@@ -30,12 +25,20 @@ catch(e) {
     throw err
 }
 
+
+// Local Packages
+const Log = require('./src/util/log')
+const Global = require('./src/util/global')
+const Plugins = require('./plugins')
+
 let app = new Koa()
 app.proxy = true
 
 app.use(koaBody({ multipart: true }));
 
 Global.Add('config', config)
+Plugins.Register.load()
+const routers = require('./src/route/router.js')
 
 // to Log
 app.use(async (ctx, next) => {

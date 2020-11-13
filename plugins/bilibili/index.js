@@ -14,7 +14,10 @@ const Store = require('../../src/store/store')
 let QrCheck = {
     intervalIds: new Map(),
     functions: new Map(),
+    time1: null,
+    time2: null,
     create(id) {
+        this.time1 = new Date()
         intervalId = setInterval(async () => {
             await Store.main.insert({ key: 'BilibiliLoginStatus', id: id, status: 'No status', message: 'No message', data: 'No data' })
             const oauthKeyQuery = await Store.main.findOne({ key: 'BilibiliQrOauthKey', id: id })
@@ -27,6 +30,13 @@ let QrCheck = {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 data: data
+            }
+            this.time2 = new Date()
+            const result = this.time2.getTime() - this.time1.getTime()
+            if (result > 60000) {
+                this.clear(id)
+                await Store.main.remove({ key: 'BilibiliQrOauthKey', id: id }, {})
+                return
             }
             const res = await axios(config)
             Log.trace(res.data)
@@ -48,7 +58,7 @@ let QrCheck = {
                 await Store.main.update({ key: 'BilibiliLoginStatus', id: id }, { $set: { message: res.data.message } }, {})
                 await Store.main.update({ key: 'BilibiliLoginStatus', id: id }, { $set: { data: res.data.data } }, {})
             }
-        }, 2000)
+        }, 3000)
 
         this.intervalIds.set(id, intervalId)
     },
@@ -115,7 +125,7 @@ exports.endpoints = {
         }
         res = await Store.main.findOne({ key: 'BilibiliQrOauthKey', id: query.id })
         if (!res) {
-            ctx.body = { code: -1, message: '请求已过期，请重新申请' }
+            ctx.body = { code: -10, message: '请求已过期，请重新申请' }
             return
         }
         res = await Store.main.findOne({ key: 'BilibiliLoginStatus', id: query.id })
@@ -123,7 +133,7 @@ exports.endpoints = {
             ctx.body = { code: res.data, message: res.message, data: res.data }
         }
         else {
-            ctx.body = { code: 0, message: res.message, data: res.data }
+            ctx.body = { code: 1, message: res.message, data: res.data }
         }
         await next()
     }

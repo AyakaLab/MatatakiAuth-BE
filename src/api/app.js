@@ -1,10 +1,9 @@
 const KoaRouter = require('koa-router')
 
-const { getQrloginUrl, getLoginStatus } = require('../controllers/bilibili/auth')
+const { getAvailableBinding } = require('../controllers/app')
 
 let appRouters = new KoaRouter()
 
-appRouters.get("/qrcodeUrl", getQrloginUrl)
-appRouters.get("/loginStatus", getLoginStatus)
+appRouters.get("/availableBinding", getAvailableBinding)
 
 module.exports = appRouters

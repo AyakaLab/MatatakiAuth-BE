@@ -34,10 +34,11 @@ const Plugins = require('./plugins')
 let app = new Koa()
 app.proxy = true
 
-app.use(koaBody({ multipart: true }));
+app.use(koaBody({ multipart: true }))
 
 Global.Add('config', config)
 Plugins.Register.load()
+
 const routers = require('./src/route/router.js')
 
 // to Log

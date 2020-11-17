@@ -34,6 +34,17 @@ let getUserInfo = async (ctx, next) => {
     }
 }
 
+let getUserInfoPlain = async (ctx, next) => {
+    let query = ctx.request.query
+    query = JSON.parse(JSON.stringify(query))
+
+    let profile = await Store.user.findOne({ key: 'User' + query.platform + 'Profile', id: query.userId })
+    if (profile) ctx.body = profile
+    else ctx.body = false
+
+    await next()
+}
+
 let getUnbinding = async (ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
@@ -43,5 +54,6 @@ let getUnbinding = async (ctx, next) => {
 }
 module.exports = {
     getUserInfo,
+    getUserInfoPlain,
     getUnbinding
 }

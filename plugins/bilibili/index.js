@@ -158,7 +158,8 @@ exports.endpoints = {
                     dedeUserIDckMd5: data['DedeUserID__ckMd5'], 
                     expires: res.expires,
                     SESSDATA: data.SESSDATA,
-                    biliJct: data['bili_jct']
+                    biliJct: data['bili_jct'],
+                    available: false
                 })
             }
             else {

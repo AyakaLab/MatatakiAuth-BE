@@ -39,7 +39,6 @@ let QrCheck = {
                 return
             }
             const res = await axios(config)
-            Log.trace(res.data)
             if (res.data.data === -1) {
                 this.clear(id)
             }
@@ -48,7 +47,7 @@ let QrCheck = {
             }
             if (res.data.status) {
                 this.clear(id)
-                this.emit('loggedIn', null, res.data.data)
+                this.emit('loggedIn', null, res)
                 await Store.fresh.update({ key: 'BilibiliLoginStatus', id: id }, { $set: { status: res.data.status } }, {})
                 await Store.fresh.update({ key: 'BilibiliLoginStatus', id: id }, { $set: { message: 'Login Success' } }, {})
                 await Store.fresh.update({ key: 'BilibiliLoginStatus', id: id }, { $set: { data: res.data.data } }, {})
@@ -66,11 +65,9 @@ let QrCheck = {
         clearInterval(this.intervalIds.get(id))
     },
     on(functionName, callback) {
-        Log.info(callback)
         this.functions.set(functionName, callback)
     },
     emit(functionName, err, data) {
-        console.log(this.functions.get(functionName).call)
         this.functions.get(functionName).call(this, err, data)
     }
 }
@@ -105,9 +102,24 @@ exports.endpoints = {
                 Log.fatal(err)
             }
             else {
-                Log.debug(data)
                 await Store.fresh.remove({ key: 'BilibiliQrOauthKey', id: hashRes }, {})
-                await Store.fresh.insert({ key: 'BilibiliLoginCookies', data: data, id: hashRes })
+                let date = data.headers['set-cookie']
+                let expires = {}
+                date.forEach(item => {
+                    let pairName = item.replace(/=.*$/, '')
+                    let arr = item.split('; ')
+                    arr.forEach(e => {
+                        if (e.includes('Expires')) {
+                            let pair = e.split('=')
+                            Object.defineProperty(expires, pairName, {
+                                value: pair[1],
+                                writable: true,
+                                enumerable: true
+                            })
+                        }
+                    })
+                })
+                await Store.fresh.insert({ key: 'BilibiliLoginCookies', data: data.data.data, expires: expires, id: hashRes })
             }
         })
     
@@ -142,16 +154,19 @@ exports.endpoints = {
                     key: 'UserBilibiliProfile', 
                     id: query.userId, 
                     userId: data.DedeUserID, 
+                    dedeUserID: data.DedeUserID,
                     dedeUserIDckMd5: data['DedeUserID__ckMd5'], 
-                    expires: Math.round(Number(data.Expires) * 1000),
+                    expires: res.expires,
                     SESSDATA: data.SESSDATA,
                     biliJct: data['bili_jct']
                 })
             }
             else {
+                Log.info('Updating Bilibili Profile for id ' + query.userId)
                 await Store.user.update({ key: 'UserBilibiliProfile', id: query.userId }, { $set: { userId: data.DedeUserID } }, {})
+                await Store.user.update({ key: 'UserBilibiliProfile', id: query.userId }, { $set: { dedeUserID: data.DedeUserID } }, {})
                 await Store.user.update({ key: 'UserBilibiliProfile', id: query.userId }, { $set: { dedeUserIDckMd5: data['DedeUserID__ckMd5'] } }, {})
-                await Store.user.update({ key: 'UserBilibiliProfile', id: query.userId }, { $set: { expires: Math.round(Number(data.Expires) * 1000) } }, {})
+                await Store.user.update({ key: 'UserBilibiliProfile', id: query.userId }, { $set: { expires: res.expires } }, {})
                 await Store.user.update({ key: 'UserBilibiliProfile', id: query.userId }, { $set: { SESSDATA: data.SESSDATA } }, {})
                 await Store.user.update({ key: 'UserBilibiliProfile', id: query.userId }, { $set: { biliJct: data['bili_jct'] } }, {})
             }

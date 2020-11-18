@@ -64,9 +64,26 @@ let getUserInfoList = async (ctx, next) => {
     await next()
 }
 
+let getSetAvailable = async (ctx, next) => {
+    let query = ctx.request.query
+    query = JSON.parse(JSON.stringify(query))
+
+    let profile = await Store.user.findOne({ key: 'User' + query.platform + 'Profile', id: query.userId })
+    if (profile) {
+        await Store.user.update({ key: 'User' + query.platform + 'Profile', id: query.userId }, { $set: { available: query.available } }, {})
+        ctx.body = { code: 0, message: 'success' }
+        await next()
+    }
+    else { 
+        ctx.body = { code: 0, message: 'User Not Found' }
+        await next()
+    }
+}
+
 module.exports = {
     getUserInfo,
     getUserInfoPlain,
     getUserInfoList,
-    getUnbinding
+    getUnbinding,
+    getSetAvailable
 }

@@ -1,3 +1,4 @@
+const Log = require('../util/log')
 const Store = require("../store/store")
 
 let getUserInfo = async (ctx, next) => {
@@ -52,8 +53,20 @@ let getUnbinding = async (ctx, next) => {
     ctx.body = {code: 0, message: 'success'}
     await next()
 }
+
+let getUserInfoList = async (ctx, next) => {
+    let platform = ctx.params.platform.split('')
+    platform[0] = platform[0].toUpperCase()
+    platform = platform.join('')
+    Log.debug('User' + platform + 'Profile')
+    const res = await Store.user.find({ key: 'User' + platform + 'Profile' })
+    ctx.body = res
+    await next()
+}
+
 module.exports = {
     getUserInfo,
     getUserInfoPlain,
+    getUserInfoList,
     getUnbinding
 }

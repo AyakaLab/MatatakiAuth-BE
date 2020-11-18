@@ -70,13 +70,11 @@ let getSetAvailable = async (ctx, next) => {
 
     let profile = await Store.user.findOne({ key: 'User' + query.platform + 'Profile', id: query.userId })
     if (profile) {
-        await Store.user.update({ key: 'User' + query.platform + 'Profile', id: query.userId }, { $set: { available: query.available } }, {})
+        await Store.user.update({ key: 'User' + query.platform + 'Profile', id: query.userId }, { $set: { available: Boolean(query.available) } }, {})
         ctx.body = { code: 0, message: 'success' }
-        await next()
     }
-    else { 
-        ctx.body = { code: 0, message: 'User Not Found' }
-        await next()
+    else if (!profile) { 
+        ctx.body = { code: -1, message: 'User Not Found' }
     }
 }
 

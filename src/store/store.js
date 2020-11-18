@@ -5,6 +5,8 @@ let freshDb = new DataStore()
 let mainDb = new DataStore({filename: './data/matatakiauth.db', autoload: true})
 let userDb = new DataStore({filename: './data/user.db', autoload: true})
 
+userDb.persistence.setAutocompactionInterval(1000)
+
 let fresh = {
     /**
      * Inserting documents    
@@ -149,9 +151,8 @@ let main = {
                     err.name = "Main Database Error"
                     reject(err)
                 }
-                let error = new Error("Cannot find query " + JSON.stringify(key))
-                error.name = "Main Database Error"
-                if (docs.length === 0) reject(error)
+                
+                if (docs.length === 0) resolve(docs)
                 resolve(docs)
             })
         })
@@ -270,9 +271,8 @@ let user = {
                     err.name = "User Database Error"
                     reject(err)
                 }
-                let error = new Error("Cannot find query " + JSON.stringify(key))
-                error.name = "User Database Error"
-                if (docs.length === 0) reject(error)
+                
+                if (docs.length === 0) resolve(docs)
                 resolve(docs)
             })
         })

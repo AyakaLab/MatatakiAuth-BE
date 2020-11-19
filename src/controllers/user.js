@@ -65,13 +65,13 @@ let getUserInfoList = async (ctx, next) => {
 }
 
 let postUserInfoList = async (ctx, next) => {
-    console.log(ctx.request.body)
     let platform = ctx.params.platform.split('')
     platform[0] = platform[0].toUpperCase()
     platform = platform.join('')
     Log.debug('User' + platform + 'Profile')
     let listData = []
-    JSON.parse(ctx.request.body.list).forEach(item => listData.push(item))
+    if (Array.isArray(ctx.request.body.list)) ctx.request.body.list.forEach(item => listData.push(item))
+    else if (typeof(ctx.request.body.list) === 'string') JSON.parse(ctx.request.body.list).forEach(item => listData.push(item))
     const res = await Store.user.find({ key: 'User' + platform + 'Profile' })
     let listRes = []
     listRes = res.filter(i => listData.find(e => parseInt(i.id) === e))

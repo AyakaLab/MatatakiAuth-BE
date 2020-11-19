@@ -64,6 +64,19 @@ let getUserInfoList = async (ctx, next) => {
     await next()
 }
 
+let postUserInfoList = async (ctx, next) => {
+    let platform = ctx.params.platform.split('')
+    platform[0] = platform[0].toUpperCase()
+    platform = platform.join('')
+    Log.debug('User' + platform + 'Profile')
+    let listData = []
+    JSON.parse(ctx.request.body.list).forEach(item => listData.push(item))
+    const res = await Store.user.find({ key: 'User' + platform + 'Profile' })
+    let listRes = []
+    listRes = res.filter(i => listData.find(e => parseInt(i.id) === e))
+    ctx.body = listRes
+}
+
 let getSetAvailable = async (ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
@@ -82,6 +95,7 @@ module.exports = {
     getUserInfo,
     getUserInfoPlain,
     getUserInfoList,
+    postUserInfoList,
     getUnbinding,
     getSetAvailable
 }

@@ -65,6 +65,7 @@ let getUserInfoList = async (ctx, next) => {
 }
 
 let postUserInfoList = async (ctx, next) => {
+    console.log(ctx.request.body)
     let platform = ctx.params.platform.split('')
     platform[0] = platform[0].toUpperCase()
     platform = platform.join('')

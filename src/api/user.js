@@ -9,17 +9,21 @@ userRouters.use(async (ctx, next) => {
     const method = ctx.method
     if (method === 'GET') {
         if (!ctx.request.query) {
+            ctx.status = 403
             return
         }
-        else if (ctx.request.query !== config.apiKey) {
+        else if (ctx.request.query !== config.apiToken) {
+            ctx.status = 403
             return
         }
     }
     else {
-        if (!ctx.request.body.apiKey) {
+        if (!ctx.request.body.apiToken) {
+            ctx.status = 403
             return
         }
-        else if (ctx.request.body.apiKey !== config.apiKey) {
+        else if (ctx.request.body.apiToken !== config.apiToken) {
+            ctx.status = 403
             return
         }
     }

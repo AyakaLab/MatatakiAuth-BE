@@ -1,11 +1,15 @@
 <h1 align="center">MatatakiAuth-BE</h1>
 <p align="center">Backend for MatatakiAuth Platform</p>
 <p align="center">
-    <img src="https://github.com/AyakaLab/MatatakiAuth-BE/workflows/Dev%20CI/badge.svg" />
-    <img src="https://github.com/AyakaLab/MatatakiAuth-BE/workflows/Pre-Release%20CI/badge.svg" />
-    <img src="https://github.com/AyakaLab/MatatakiAuth-BE/workflows/Pre-Release%20CD/badge.svg" /><br>
-    <img src="https://github.com/AyakaLab/MatatakiAuth-BE/workflows/Production%20CI/badge.svg" />
-    <img src="https://github.com/AyakaLab/MatatakiAuth-BE/workflows/Production%20CD/badge.svg" />
+    <a href="https://github.com/AyakaLab/MatatakiAuth-BE/actions?query=workflow%3A%22Development+CI%22">
+        <img src="https://github.com/AyakaLab/MatatakiAuth-BE/workflows/Development%20CI/badge.svg" />
+    </a>
+    <a href="https://github.com/AyakaLab/MatatakiAuth-BE/actions?query=workflow%3A%22Pre-Release+CI%2FCD%22">
+        <img src="https://github.com/AyakaLab/MatatakiAuth-BE/workflows/Pre-Release%20CI/CD/badge.svg" />
+    </a>
+    <a href="https://github.com/AyakaLab/MatatakiAuth-BE/actions?query=workflow%3A%22Production+CI%2FCD%22">
+        <img src="https://github.com/AyakaLab/MatatakiAuth-BE/workflows/Production%20CI/CD/badge.svg" />
+    </a>
 </p>
 
 

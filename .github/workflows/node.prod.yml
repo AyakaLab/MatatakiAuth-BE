@@ -1,14 +1,14 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Production CI
+name: Production CI/CD
 
 on:
   pull_request:
     branches: [ production ]
 
 jobs:
-  build:
+  build-ci:
 
     runs-on: ubuntu-latest
 
@@ -25,3 +25,24 @@ jobs:
     - run: npm install
     - run: npm run conf
     - run: npm run test
+  
+  deploy:
+    needs: build-ci
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - name: SSH Remote Commands
+      uses: appleboy/ssh-action@v0.1.2
+      env: 
+        API_TOKEN: ${{ secrets.API_TOKEN }}
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        envs: API_TOKEN
+        script: cd Git/MatatakiAuth-BE && git pull && yarn && export PATH="/home/yuna/.yarn/bin:$PATH" && pm2 restart matatakiauthAPI

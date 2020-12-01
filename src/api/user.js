@@ -5,6 +5,9 @@ const { getUserInfo, getUnbinding, getSetAvailable, getUserInfoPlain, getUserInf
 
 let userRouters = new KoaRouter()
 
+userRouters.get("/unbinding", getUnbinding)
+userRouters.get("/id", getUserInfo)
+
 userRouters.use(async (ctx, next) => {
     const method = ctx.method
     if (method === 'GET') {
@@ -30,11 +33,9 @@ userRouters.use(async (ctx, next) => {
     await next()
 })
 
-userRouters.get("/unbinding", getUnbinding)
 userRouters.get("/setAvailable", getSetAvailable)
 userRouters.get("/info", getUserInfoPlain)
 userRouters.get("/info/:platform", getUserInfoList)
 userRouters.post("/info/:platform", postUserInfoList)
-userRouters.get("/:id", getUserInfo)
 
 module.exports = userRouters

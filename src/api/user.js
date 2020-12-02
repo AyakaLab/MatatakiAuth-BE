@@ -11,11 +11,11 @@ userRouters.get("/id", getUserInfo)
 userRouters.use(async (ctx, next) => {
     const method = ctx.method
     if (method === 'GET') {
-        if (!ctx.request.query) {
+        if (!ctx.request.query.apiToken) {
             ctx.status = 403
             return
         }
-        else if (ctx.request.query !== config.apiToken) {
+        else if (ctx.request.query.apiToken !== config.apiToken) {
             ctx.status = 403
             return
         }

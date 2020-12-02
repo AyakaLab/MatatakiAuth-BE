@@ -5,7 +5,7 @@ name: Development CI
 
 on:
   pull_request:
-    branches: [ master, pre-release, production ]
+    branches: [ main, pre-release, production ]
 
 jobs:
   build:

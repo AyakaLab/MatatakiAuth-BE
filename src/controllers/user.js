@@ -74,7 +74,6 @@ let getUserInfoList = async (ctx, next) => {
     Log.debug('User' + platform + 'Profile')
     const res = await Store.user.find({ key: 'User' + platform + 'Profile' })
     ctx.body = res
-    await next()
 }
 
 let postUserInfoList = async (ctx, next) => {

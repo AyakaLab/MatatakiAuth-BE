@@ -159,7 +159,7 @@ exports.endpoints = {
                     expires: res.expires,
                     SESSDATA: data.SESSDATA,
                     biliJct: data['bili_jct'],
-                    available: false
+                    available: true
                 })
             }
             else {

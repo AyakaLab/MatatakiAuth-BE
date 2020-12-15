@@ -6,7 +6,7 @@ const { getUserInfo, getUnbinding, getSetAvailable, getUserInfoPlain, getUserInf
 let userRouters = new KoaRouter()
 
 userRouters.get("/unbinding", getUnbinding)
-userRouters.get("/id", getUserInfo)
+userRouters.get("/:id", getUserInfo)
 
 userRouters.use(async (ctx, next) => {
     const method = ctx.method

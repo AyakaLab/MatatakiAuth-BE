@@ -107,5 +107,8 @@ dist
 # config file
 config.json
 
+#encryption file
+encrypt.json
+
 # database
 data/

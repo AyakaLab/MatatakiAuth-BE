@@ -33,7 +33,7 @@ let getUserInfo = async (ctx, next) => {
             let obj = {}
             obj.code = 0
             profile.platform = query.platform.toLowerCase()
-            profile.account = profile.userId
+            profile.account = profile.mainInfo
             profile.status = 1
             obj.data = [profile]
             ctx.body = obj
@@ -42,7 +42,7 @@ let getUserInfo = async (ctx, next) => {
             let obj = {}
             obj.code = 0
             obj.data = profile
-            profile.account = profile.userId
+            profile.account = profile.mainInfo
             ctx.body = obj
         }
     }
@@ -62,7 +62,7 @@ let getUserInfoPlain = async (ctx, next) => {
 let getUnbinding = async (ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
-    await Store.user.remove({ key: 'User' + query.platform + 'Profile', id: query.userId }, { multi: true })
+    await Store.user.remove({ key: 'User' + query.platform + 'Profile', mainInfo: query.account }, { multi: true })
     ctx.body = {code: 0, message: 'success'}
 }
 

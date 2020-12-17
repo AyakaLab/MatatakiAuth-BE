@@ -44,12 +44,13 @@ exports.endpoints = {
         }
 
         const authTokenRaw = ctx.request.headers.authorization
-        const authToken = authTokenRaw.replace(/^Bearer./, '')
 
         if (!authTokenRaw.includes('Bearer')) {
             ctx.status = 403
             return
         }
+
+        const authToken = authTokenRaw.replace(/^Bearer./, '')
 
         const res = disassemble(authToken)
         const oauthKeyExist = await Store.main.find({ key: 'MastodonOAuthKey', id: res.id })
@@ -84,12 +85,13 @@ exports.endpoints = {
         }
 
         const oauthTokenRaw = ctx.request.headers.authorization
-        const oauthToken = oauthTokenRaw.replace(/^Bearer./, '')
 
         if (!oauthTokenRaw.includes('Bearer')) {
             ctx.status = 403
             return
         }
+        
+        const oauthToken = oauthTokenRaw.replace(/^Bearer./, '')
 
         const res = await Store.main.findOne({ key: 'MastodonOAuthKey', id: parseInt(query.id) })
         if (res) {

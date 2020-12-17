@@ -32,7 +32,7 @@ let getUserInfo = async (ctx, next) => {
         if (query.platform) {
             let obj = {}
             obj.code = 0
-            profile.platform = 'bilibili'
+            profile.platform = query.platform.toLowerCase()
             profile.account = profile.userId
             profile.status = 1
             obj.data = [profile]

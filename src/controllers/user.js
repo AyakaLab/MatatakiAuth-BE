@@ -42,6 +42,7 @@ let getUserInfo = async (ctx, next) => {
             let obj = {}
             obj.code = 0
             obj.data = profile
+            profile.account = profile.userId
             ctx.body = obj
         }
     }

@@ -39,8 +39,17 @@ const timeoutIds = new Map()
 
 exports.endpoints = {
     getToken: async (ctx) => {
+        if (!ctx.request.headers.authorization) {
+            ctx.status = 403
+        }
+
         const authTokenRaw = ctx.request.headers.authorization
         const authToken = authTokenRaw.replace(/^Bearer./, '')
+
+        if (!authTokenRaw.includes('Bearer')) {
+            ctx.status = 403
+            return
+        }
 
         const res = disassemble(authToken)
         const oauthKeyExist = await Store.main.find({ key: 'MastodonOAuthKey', id: res.id })
@@ -66,18 +75,35 @@ exports.endpoints = {
             token: oauth.token
         }
     },
-    getAuthorizeToken: async (ctx) => {
+    getUpdate: async (ctx) => {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
-        
+
+        if (!ctx.request.headers.authorization) {
+            ctx.status = 403
+        }
+
         const oauthTokenRaw = ctx.request.headers.authorization
         const oauthToken = oauthTokenRaw.replace(/^Bearer./, '')
+
+        if (!oauthTokenRaw.includes('Bearer')) {
+            ctx.status = 403
+            return
+        }
 
         const res = await Store.main.findOne({ key: 'MastodonOAuthKey', id: parseInt(query.id) })
         if (res) {
             clearTimeout(timeoutIds.get(query.id + ""))
             timeoutIds.delete(query.id + "")
             await Store.main.remove({ key: 'MastodonOAuthKey', id: parseInt(query.id) }, {})
+        }
+
+        if (!(query.id && query.userId && query.domain && query.username)) {
+            ctx.body = {
+                code: 2,
+                message: "missing fields"
+            }
+            return
         }
         
         if (Hash.md5(decryptText(oauthToken)) === res.uuid) {
@@ -120,8 +146,8 @@ exports.register = {
             method: 'GET'
         },
         {
-            function: 'getAuthorizeToken',
-            endpoint: '/oauth/authorize',
+            function: 'getUpdate',
+            endpoint: '/oauth/update',
             method: 'GET'
         }
     ],

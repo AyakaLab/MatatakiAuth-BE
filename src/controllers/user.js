@@ -29,11 +29,18 @@ let getUserInfo = async (ctx, next) => {
     
     if (!profile) ctx.body = { code: 0, message: 'User Not Found' }
     else {
+        let account = ''
+        if (profile.mainInfo) {
+            account = profile.mainInfo
+        }
+        else {
+            account = profile.userId
+        }
         if (query.platform) {
             let obj = {}
             obj.code = 0
             profile.platform = query.platform.toLowerCase()
-            profile.account = profile.mainInfo
+            profile.account = account
             profile.status = 1
             obj.data = [profile]
             ctx.body = obj
@@ -42,7 +49,7 @@ let getUserInfo = async (ctx, next) => {
             let obj = {}
             obj.code = 0
             obj.data = profile
-            profile.account = profile.mainInfo
+            profile.account = account
             ctx.body = obj
         }
     }

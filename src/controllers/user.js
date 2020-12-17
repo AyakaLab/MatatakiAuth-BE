@@ -36,6 +36,8 @@ let getUserInfo = async (ctx, next) => {
         else {
             account = profile.userId
         }
+        delete profile.key
+        delete profile._id
         if (query.platform) {
             let obj = {}
             obj.code = 0

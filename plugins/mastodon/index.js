@@ -114,9 +114,10 @@ exports.endpoints = {
                 await Store.user.update({ key: "UserMastodonProfile", id: query.id }, { $set: { userId: query.userId }}, {})
                 await Store.user.update({ key: "UserMastodonProfile", id: query.id }, { $set: { domain: query.domain }}, {})
                 await Store.user.update({ key: "UserMastodonProfile", id: query.id }, { $set: { username: query.username} }, {})
+                await Store.user.update({ key: "UserMastodonProfile", id: query.id }, { $set: { mainInfo: query.username} }, {})
             }
             else {
-                await Store.user.insert({ key: "UserMastodonProfile", id: query.id, userId: query.userId, domain: query.domain, username: query.username })
+                await Store.user.insert({ key: "UserMastodonProfile", id: query.id, userId: query.userId, domain: query.domain, username: query.username, mainInfo: query.username })
             }
             const user = await Store.user.findOne({ key: "UserMastodonProfile", id: query.id })
             if (user) {

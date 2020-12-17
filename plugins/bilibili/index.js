@@ -159,6 +159,7 @@ exports.endpoints = {
                     expires: res.expires,
                     SESSDATA: data.SESSDATA,
                     biliJct: data['bili_jct'],
+                    mainInfo: data.DedeUserID,
                     available: true
                 })
             }
@@ -170,6 +171,7 @@ exports.endpoints = {
                 await Store.user.update({ key: 'UserBilibiliProfile', id: query.userId }, { $set: { expires: res.expires } }, {})
                 await Store.user.update({ key: 'UserBilibiliProfile', id: query.userId }, { $set: { SESSDATA: data.SESSDATA } }, {})
                 await Store.user.update({ key: 'UserBilibiliProfile', id: query.userId }, { $set: { biliJct: data['bili_jct'] } }, {})
+                await Store.user.update({ key: 'UserBilibiliProfile', id: query.userId }, { $set: { mainInfo: data.DedeUserID } }, {})
             }
 
             await next()

@@ -69,7 +69,7 @@ let getUserInfoPlain = async (ctx, next) => {
 let getUnbinding = async (ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
-    await Store.user.remove({ key: 'User' + query.platform + 'Profile', mainInfo: query.account }, { multi: true })
+    await Store.user.remove({ key: 'User' + query.platform + 'Profile', id: query.userId }, { multi: true })
     ctx.body = {code: 0, message: 'success'}
 }
 

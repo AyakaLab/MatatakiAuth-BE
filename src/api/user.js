@@ -6,29 +6,16 @@ const { getUserInfo, getUnbinding, getSetAvailable, getUserInfoPlain, getUserInf
 let userRouters = new KoaRouter()
 
 userRouters.get("/unbinding", getUnbinding)
-userRouters.get("/id", getUserInfo)
+userRouters.get("/:id", getUserInfo)
 
 userRouters.use(async (ctx, next) => {
-    const method = ctx.method
-    if (method === 'GET') {
-        if (!ctx.request.query.apiToken) {
-            ctx.status = 403
-            return
-        }
-        else if (ctx.request.query.apiToken !== config.apiToken) {
-            ctx.status = 403
-            return
-        }
+    if (!ctx.request.headers.authorization) {
+        ctx.status = 403
+        return
     }
-    else {
-        if (!ctx.request.body.apiToken) {
-            ctx.status = 403
-            return
-        }
-        else if (ctx.request.body.apiToken !== config.apiToken) {
-            ctx.status = 403
-            return
-        }
+    else if (ctx.request.headers.authorization.replace(/^Bearer./, '') !== config.apiToken) {
+        ctx.status = 403
+        return
     }
     await next()
 })

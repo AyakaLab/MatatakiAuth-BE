@@ -1,0 +1,6 @@
+{
+    "displayName": "Mastodon",
+    "groupName": "Official",
+    "author": ["Ayaka Neko <neko@ayaka.moe>"],
+    "description": "Mastodon Authentication"
+}

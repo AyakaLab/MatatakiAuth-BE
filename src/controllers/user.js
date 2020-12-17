@@ -30,8 +30,6 @@ let getUserInfo = async (ctx, next) => {
     if (!profile) ctx.body = { code: 0, message: 'User Not Found' }
     else {
         if (query.platform) {
-            profile.SESSDATA = ''
-            profile.biliJct = ''
             let obj = {}
             obj.code = 0
             profile.platform = 'bilibili'

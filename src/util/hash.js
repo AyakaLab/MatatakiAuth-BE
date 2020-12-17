@@ -9,4 +9,9 @@ function sha256(string) {
     return hash
 }
 
+function md5 (string) {
+    return crypto.createHash('md5').update(string).digest('hex')
+}
+
 exports.sha256 = sha256
+exports.md5 = md5

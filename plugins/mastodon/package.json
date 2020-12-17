@@ -1,0 +1,21 @@
+{
+  "name": "matatakiauth-mastodonauthentication",
+  "version": "1.0.0",
+  "description": "Mastodon Authentication",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AyakaLab/MatatakiAuth-BE.git"
+  },
+  "keywords": [
+    "MatatakiAuth"
+  ],
+  "author": "Ayaka Neko <neko.ayaka.moe>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/AyakaLab/MatatakiAuth-BE/issues"
+  },
+  "homepage": "https://github.com/AyakaLab/MatatakiAuth-BE#readme",
+  "dependencies": {
+  }
+}

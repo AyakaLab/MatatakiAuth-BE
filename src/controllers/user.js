@@ -10,6 +10,7 @@ let getUserInfo = async (ctx, next) => {
     const accessToken = ctx.request.headers['x-access-token']
     if (accessToken) {
         ctx.user = disassemble(accessToken)
+        console.log(ctx.user)
     }
 
     if (!ctx.user || !ctx.user.id) {

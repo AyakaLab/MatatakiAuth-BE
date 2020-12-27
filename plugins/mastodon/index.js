@@ -65,7 +65,7 @@ exports.endpoints = {
 
         const id = setTimeout(() => {
             Store.main.remove({ key: 'MastodonOAuthKey', id: res.id }, {})
-        }, 6000)
+        }, 30000)
 
         timeoutIds.set(res.id + "", id)
 

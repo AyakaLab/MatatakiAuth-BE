@@ -21,10 +21,10 @@ let getUserInfo = async (ctx, next) => {
 
     let profile
     if (query.platform) {
-        profile = await Store.user.findOne({ key: 'User' + query.platform + 'Profile', id: ctx.user.id })
+        profile = await Store.user.findOne({ key: 'User' + query.platform + 'Profile', id: ctx.user.id + '' })
     }
     else {
-        profile = await Store.user.findOne({ key: 'UserProfile', id: ctx.user.id })
+        profile = await Store.user.findOne({ key: 'UserProfile', id: ctx.user.id + '' })
     }
     
     if (!profile) ctx.body = { code: 0, message: 'User Not Found' }

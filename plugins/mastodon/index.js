@@ -80,6 +80,10 @@ exports.endpoints = {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
 
+        const keyInfo = await Store.main.findOne({ key: 'MastodonOAuthKey', id: parseInt(query.id) })
+        console.log(keyInfo)
+        console.log(ctx.request.headers.authorization)
+
         if (!ctx.request.headers.authorization) {
             ctx.status = 403
         }

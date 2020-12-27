@@ -123,7 +123,7 @@ exports.endpoints = {
             else {
                 await Store.user.insert({ key: "UserMastodonProfile", id: query.userId, userId: query.id, domain: query.domain, username: query.username, mainInfo: query.username })
             }
-            const user = await Store.user.findOne({ key: "UserMastodonProfile", id: query.id })
+            const user = await Store.user.findOne({ key: "UserMastodonProfile", id: query.userId })
             if (user) {
                 ctx.body = {
                     code: 0,

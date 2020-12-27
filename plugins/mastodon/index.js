@@ -80,7 +80,7 @@ exports.endpoints = {
         let query = ctx.request.query
         query = JSON.parse(JSON.stringify(query))
 
-        const keyInfo = await Store.main.findOne({ key: 'MastodonOAuthKey', id: query.id })
+        const keyInfo = await Store.main.findOne({ key: 'MastodonOAuthKey', id: parseInt(query.userId) })
         console.log(keyInfo)
         console.log(ctx.request.headers.authorization)
 
@@ -97,11 +97,11 @@ exports.endpoints = {
         
         const oauthToken = oauthTokenRaw.replace(/^Bearer./, '')
 
-        const res = await Store.main.findOne({ key: 'MastodonOAuthKey', id: query.id })
+        const res = await Store.main.findOne({ key: 'MastodonOAuthKey', id: parseInt(query.userId) })
         if (res) {
             clearTimeout(timeoutIds.get(query.id + ""))
             timeoutIds.delete(query.id + "")
-            await Store.main.remove({ key: 'MastodonOAuthKey', id: query.id }, {})
+            await Store.main.remove({ key: 'MastodonOAuthKey', id: parseInt(query.userId) }, {})
         }
 
         if (!(query.id && query.userId && query.domain && query.username)) {

@@ -115,10 +115,10 @@ exports.endpoints = {
         if (Hash.md5(decryptText(oauthToken)) === res.uuid) {
             const userExist = await Store.user.findOne({ key: "UserMastodonProfile", id: query.userId })
             if (userExist) {
-                await Store.user.update({ key: "UserMastodonProfile", id: query.id }, { $set: { userId: query.id }}, {})
-                await Store.user.update({ key: "UserMastodonProfile", id: query.id }, { $set: { domain: query.domain }}, {})
-                await Store.user.update({ key: "UserMastodonProfile", id: query.id }, { $set: { username: query.username} }, {})
-                await Store.user.update({ key: "UserMastodonProfile", id: query.id }, { $set: { mainInfo: query.username} }, {})
+                await Store.user.update({ key: "UserMastodonProfile", id: query.userId }, { $set: { userId: query.id }}, {})
+                await Store.user.update({ key: "UserMastodonProfile", id: query.userId }, { $set: { domain: query.domain }}, {})
+                await Store.user.update({ key: "UserMastodonProfile", id: query.userId }, { $set: { username: query.username} }, {})
+                await Store.user.update({ key: "UserMastodonProfile", id: query.userId }, { $set: { mainInfo: query.username} }, {})
             }
             else {
                 await Store.user.insert({ key: "UserMastodonProfile", id: query.userId, userId: query.id, domain: query.domain, username: query.username, mainInfo: query.username })

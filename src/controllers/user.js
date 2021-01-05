@@ -93,7 +93,13 @@ let getUserInfoByPlatformId = async (ctx, next) => {
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
 
-    let profile = await Store.user.findOne({ key: 'User' + query.platform + 'Profile', userId: query.userId })
+    let platform = query.platform.split('')
+    platform[0] = platform[0].toUpperCase()
+    platform = platform.join('')
+
+    console.log('User' + platform + 'Profile')
+
+    let profile = await Store.user.findOne({ key: 'User' + platform + 'Profile', userId: query.userId })
     if (profile) ctx.body = profile
     else ctx.body = false
 }

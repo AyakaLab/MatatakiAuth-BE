@@ -77,7 +77,7 @@ let getUserInfoPlain = async (ctx, next) => {
 
     let profile = await Store.user.findOne({ key: 'User' + query.platform + 'Profile', id: query.userId })
     if (profile) ctx.body = profile
-    else ctx.body = { code: 1, messsage: 'Data Not Found' }
+    else ctx.body = { code: 0, data: null }
 }
 
 let getUserInfoByPlatformId = async (ctx, next) => {
@@ -109,7 +109,7 @@ let getUserInfoByPlatformId = async (ctx, next) => {
     else profile = await Store.user.findOne({ key: 'User' + platform + 'Profile', userId: query.userId })
 
     if (profile) ctx.body = profile
-    else ctx.body = { code: 1, message: 'Data Not Found' }
+    else ctx.body = { code: 0, data: null }
 }
 
 let getUnbinding = async (ctx, next) => {

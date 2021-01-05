@@ -104,6 +104,7 @@ let getUserInfoByPlatformId = async (ctx, next) => {
         let userFull = query.userId.split('@')
         const userId = userFull[0]
         const domain = userFull[1]
+        console.log({ key: 'User' + platform + 'Profile', userId: userId, domain: domain.replace(/(http(s?):\/\/)/gm, '') })
         profile = await Store.user.findOne({ key: 'User' + platform + 'Profile', userId: userId, domain: domain.replace(/(http(s?):\/\/)/gm, '') })
     }
     else profile = await Store.user.findOne({ key: 'User' + platform + 'Profile', userId: query.userId })

@@ -1,15 +1,18 @@
 const Log = require('../util/log')
 const Store = require("../store/store")
+const config = require('../../config.json')
 
 const { disassemble } = require('../util/cookie')
 
 let getUserInfo = async (ctx, next) => {
+    console.log(ctx)
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
 
     const accessToken = ctx.request.headers['x-access-token']
     if (accessToken) {
         ctx.user = disassemble(accessToken)
+        console.log(ctx.user)
     }
 
     if (!ctx.user || !ctx.user.id) {
@@ -21,12 +24,14 @@ let getUserInfo = async (ctx, next) => {
 
     let profile
     if (query.platform) {
+        console.log(query.platform)
+        console.log({ key: 'User' + query.platform + 'Profile', id: ctx.user.id })
         profile = await Store.user.findOne({ key: 'User' + query.platform + 'Profile', id: ctx.user.id })
     }
     else {
-        profile = await Store.user.findOne({ key: 'UserProfile', id: ctx.user.id })
+        profile = await Store.user.findOne({ key: 'UserProfile', id: ctx.user.id + '' })
     }
-    
+    console.log(profile)
     if (!profile) ctx.body = { code: 0, message: 'User Not Found' }
     else {
         let account = ''
@@ -58,14 +63,54 @@ let getUserInfo = async (ctx, next) => {
 }
 
 let getUserInfoPlain = async (ctx, next) => {
+    if (!ctx.request.headers.authorization) {
+        ctx.status = 403
+        return
+    }
+    else if (ctx.request.headers.authorization.replace(/^Bearer./, '') !== config.apiToken) {
+        ctx.status = 403
+        return
+    }
+
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
 
     let profile = await Store.user.findOne({ key: 'User' + query.platform + 'Profile', id: query.userId })
     if (profile) ctx.body = profile
-    else ctx.body = false
+    else ctx.body = { code: 0, data: null }
+}
 
-    await next()
+let getUserInfoByPlatformId = async (ctx, next) => {
+    if (!ctx.request.headers.authorization) {
+        ctx.status = 403
+        return
+    }
+    else if (ctx.request.headers.authorization.replace(/^Bearer./, '') !== config.apiToken) {
+        ctx.status = 403
+        return
+    }
+    
+    let query = ctx.request.query
+    query = JSON.parse(JSON.stringify(query))
+
+    let platform = query.platform.split('')
+    platform[0] = platform[0].toUpperCase()
+    platform = platform.join('')
+
+    console.log('User' + platform + 'Profile')
+
+    let profile = {}
+    if (platform === "Mastodon") {
+        let userFull = query.userId.split('@')
+        const userId = userFull[0]
+        const domain = userFull[1]
+        console.log({ key: 'User' + platform + 'Profile', userId: userId, domain: "https://" + domain })
+        profile = await Store.user.findOne({ key: 'User' + platform + 'Profile', userId: userId, domain: "https://" + domain })
+    }
+    else profile = await Store.user.findOne({ key: 'User' + platform + 'Profile', userId: query.userId })
+
+    if (profile) ctx.body = profile
+    else ctx.body = { code: 0, data: null }
 }
 
 let getUnbinding = async (ctx, next) => {
@@ -76,6 +121,15 @@ let getUnbinding = async (ctx, next) => {
 }
 
 let getUserInfoList = async (ctx, next) => {
+    if (!ctx.request.headers.authorization) {
+        ctx.status = 403
+        return
+    }
+    else if (ctx.request.headers.authorization.replace(/^Bearer./, '') !== config.apiToken) {
+        ctx.status = 403
+        return
+    }
+    
     let platform = ctx.params.platform.split('')
     platform[0] = platform[0].toUpperCase()
     platform = platform.join('')
@@ -85,6 +139,15 @@ let getUserInfoList = async (ctx, next) => {
 }
 
 let postUserInfoList = async (ctx, next) => {
+    if (!ctx.request.headers.authorization) {
+        ctx.status = 403
+        return
+    }
+    else if (ctx.request.headers.authorization.replace(/^Bearer./, '') !== config.apiToken) {
+        ctx.status = 403
+        return
+    }
+    
     let platform = ctx.params.platform.split('')
     platform[0] = platform[0].toUpperCase()
     platform = platform.join('')
@@ -99,6 +162,15 @@ let postUserInfoList = async (ctx, next) => {
 }
 
 let getSetAvailable = async (ctx, next) => {
+    if (!ctx.request.headers.authorization) {
+        ctx.status = 403
+        return
+    }
+    else if (ctx.request.headers.authorization.replace(/^Bearer./, '') !== config.apiToken) {
+        ctx.status = 403
+        return
+    }
+    
     let query = ctx.request.query
     query = JSON.parse(JSON.stringify(query))
 
@@ -113,6 +185,7 @@ let getSetAvailable = async (ctx, next) => {
 }
 
 module.exports = {
+    getUserInfoByPlatformId,
     getUserInfo,
     getUserInfoPlain,
     getUserInfoList,
